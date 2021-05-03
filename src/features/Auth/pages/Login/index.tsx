@@ -1,4 +1,6 @@
-import { Card, Form } from 'antd';
+import { Card, Form, message } from 'antd';
+import authApi from 'api/authApi';
+import { savePrivateKey, savePublicKey } from 'app/userSlice';
 import LoginForm, { ILoginValues } from 'features/Auth/components/LoginForm';
 import 'features/Auth/pages/Login/styles.scss';
 import React, { useState } from 'react';
@@ -13,6 +15,19 @@ function Login(): JSX.Element {
 
   const handleLogin = (values: ILoginValues) => {
     setIsSubmitting(true);
+
+    const { privateKey } = values;
+    authApi.login(privateKey).then((res: { publicKey: string }) => {
+      const { publicKey } = res;
+      if (!publicKey) {
+        message.error(`Private key isn't exist`);
+        setIsSubmitting(false);
+        return null;
+      }
+      dispatch(savePublicKey(publicKey));
+      dispatch(savePrivateKey(privateKey));
+      setIsSubmitting(false);
+    });
   };
 
   return (

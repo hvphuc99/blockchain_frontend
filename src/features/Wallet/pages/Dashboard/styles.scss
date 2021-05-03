@@ -1,1 +1,29 @@
+.card-dashboard {
+  display: flex;
+  border-radius: 10px;
+  padding: 20px;
+  min-height: 143px;
 
+  &__content {
+    flex-grow: 1;
+    padding-left: 20px;
+    h4 {
+      color: white;
+    }
+    span {
+      overflow: hidden;
+      word-break: break-all;
+      color: white;
+    }
+  }
+}
+
+.col-dashboard {
+  &__left {
+    padding-right: 10px;
+  }
+
+  &__right {
+    padding-left: 10px;
+  }
+}

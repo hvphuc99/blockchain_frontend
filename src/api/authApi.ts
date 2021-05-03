@@ -1,7 +1,7 @@
 import axiosClient from './axiosClient';
 
 const authApi = {
-  login: (privateKey: string): Promise<{ privateKey: string; success: string }> => {
+  login: (privateKey: string): Promise<{ publicKey: string }> => {
     const url = '/login';
     const body = {
       privateKey,
@@ -10,8 +10,8 @@ const authApi = {
     return axiosClient.post(url, body);
   },
 
-  registerRootUser: (): Promise<any> => {
-    const url = '/generatePrivateKey';
+  register: (): Promise<any> => {
+    const url = '/register';
 
     const body = {};
 
