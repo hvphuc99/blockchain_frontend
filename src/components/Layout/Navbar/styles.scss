@@ -1,0 +1,42 @@
+.trigger {
+  display: flex;
+  align-items: center;
+
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 24px;
+  cursor: pointer;
+
+  &__avatar {
+    display: flex;
+    align-items: center;
+  }
+
+  svg {
+    margin-left: 10px;
+  }
+
+  &__dropdown {
+    min-width: 150px !important;
+
+    .ant-dropdown-menu {
+      border-radius: 5px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    .ant-dropdown-menu-item {
+      padding-top: 5px;
+      padding-bottom: 5px;
+
+      color: #8a9097;
+    }
+  }
+}
