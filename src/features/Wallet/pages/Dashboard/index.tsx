@@ -10,28 +10,31 @@ function Dashboard(): JSX.Element {
   const { publicKey } = useSelector((state: RootState) => state.user);
 
   return (
-    <Row>
-      <Col span={12} className="col-dashboard__left">
-        <div className="card-dashboard" style={{ backgroundColor: '#7070E3' }}>
-          <AuditOutlined style={{ fontSize: 40, color: 'white' }} />
-          <div className="card-dashboard__content">
-            <Title level={4}>Address</Title>
-            <span>{publicKey}</span>
+    <>
+      <Title level={2}>Dashboard</Title>
+      <Row>
+        <Col span={12} className="col-dashboard__left">
+          <div className="card-dashboard" style={{ backgroundColor: '#7070E3' }}>
+            <AuditOutlined style={{ fontSize: 40, color: 'white' }} />
+            <div className="card-dashboard__content">
+              <Title level={4}>Address</Title>
+              <span>{publicKey}</span>
+            </div>
           </div>
-        </div>
-      </Col>
-      <Col span={12} className="col-dashboard__right">
-        <div className="card-dashboard" style={{ backgroundColor: '#25B0E8' }}>
-          <CreditCardOutlined style={{ fontSize: 40, color: 'white' }} />
-          <div className="card-dashboard__content">
-            <Title level={4} style={{ margin: 0 }}>
-              Balance
-            </Title>
-            <span style={{ fontSize: 40 }}>0</span>
+        </Col>
+        <Col span={12} className="col-dashboard__right">
+          <div className="card-dashboard" style={{ backgroundColor: '#25B0E8' }}>
+            <CreditCardOutlined style={{ fontSize: 40, color: 'white' }} />
+            <div className="card-dashboard__content">
+              <Title level={4} style={{ margin: 0 }}>
+                Balance
+              </Title>
+              <span style={{ fontSize: 40 }}>0</span>
+            </div>
           </div>
-        </div>
-      </Col>
-    </Row>
+        </Col>
+      </Row>
+    </>
   );
 }
 

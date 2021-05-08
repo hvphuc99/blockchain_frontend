@@ -26,10 +26,10 @@ function Sidebar(props: ISidebar): JSX.Element {
         <Menu.Item key="1" icon={<HomeOutlined />} onClick={() => history.push('/dashboard')}>
           Dashboard
         </Menu.Item>
-        <Menu.Item key="2" icon={<DollarOutlined />} onClick={() => history.push('/send-transaction')}>
+        <Menu.Item key="2" icon={<DollarOutlined />} onClick={() => history.push('/sendTransaction')}>
           Send Transaction
         </Menu.Item>
-        <Menu.Item key="3" icon={<HistoryOutlined />} onClick={() => history.push('/history-transaction')}>
+        <Menu.Item key="3" icon={<HistoryOutlined />} onClick={() => history.push('/transactionHistory')}>
           Transaction History
         </Menu.Item>
       </Menu>

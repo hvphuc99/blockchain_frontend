@@ -1,15 +1,15 @@
-import React from 'react';
 import 'App.less';
-import 'styles/common.scss';
-import { BrowserRouter, Redirect, Switch } from 'react-router-dom';
-import Login from 'features/Auth/pages/Login';
-import PublicRoute from 'components/PublicRoute';
-import PrivateRoute from 'components/PrivateRoute';
-import { Provider } from 'react-redux';
 import store from 'app/store';
-import Register from './features/Auth/pages/Register';
 import Layout from 'components/Layout';
+import PrivateRoute from 'components/PrivateRoute';
+import PublicRoute from 'components/PublicRoute';
+import Login from 'features/Auth/pages/Login';
 import Wallet from 'features/Wallet';
+import React from 'react';
+import { Provider } from 'react-redux';
+import { BrowserRouter, Switch } from 'react-router-dom';
+import 'styles/common.scss';
+import Register from './features/Auth/pages/Register';
 
 function App(): JSX.Element {
   return (
@@ -21,8 +21,7 @@ function App(): JSX.Element {
 
           <Layout>
             <Switch>
-              <PrivateRoute path="/dashboard" component={Wallet} />
-              <Redirect from="/" to="/dashboard" />
+              <PrivateRoute path="/" component={Wallet} />
             </Switch>
           </Layout>
         </Switch>

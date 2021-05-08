@@ -22,9 +22,9 @@ function MainLayout({ children }: { children: React.ReactNode }): JSX.Element {
     const { pathname } = location;
     if (includes(pathname, 'dashboard')) {
       setSelectedKey('1');
-    } else if (includes(pathname, 'send-transaction')) {
+    } else if (includes(pathname, 'sendTransaction')) {
       setSelectedKey('2');
-    } else if (includes(pathname, 'history-transaction')) {
+    } else if (includes(pathname, 'transactionHistory')) {
       setSelectedKey('3');
     }
   }, []);
@@ -35,10 +35,10 @@ function MainLayout({ children }: { children: React.ReactNode }): JSX.Element {
       history.push('/dashboard');
       setSelectedKey(key);
     } else if (key === '2') {
-      history.push('/send-transaction');
+      history.push('/sendTransaction');
       setSelectedKey(key);
     } else if (key === '3') {
-      history.push('/history-transaction');
+      history.push('/transactionHistory');
       setSelectedKey(key);
     }
   };
