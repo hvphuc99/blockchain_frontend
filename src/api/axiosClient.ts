@@ -13,8 +13,8 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.request.use(async (config: AxiosRequestConfig) => {
-  const token = cookies.get('token');
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+  const privateKey = cookies.get('privateKey');
+  if (privateKey) config.headers.Authorization = `Bearer ${privateKey}`;
   return config;
 });
 

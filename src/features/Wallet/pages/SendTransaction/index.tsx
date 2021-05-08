@@ -1,12 +1,25 @@
 import { Button, Form, Input, InputNumber, message } from 'antd';
 import Title from 'antd/lib/typography/Title';
+import walletApi from 'api/walletApi';
 import React from 'react';
 import './styles.scss';
 
+interface ISendTransactionForm {
+  address: string;
+  amount: number;
+}
+
 function SendTransaction(): JSX.Element {
-  const handleSubmit = () => {
-    //Todo: call api
-    message.success('Successful sent');
+  const handleSubmit = (values: ISendTransactionForm) => {
+    const { address, amount } = values;
+    walletApi.sendTransaction(address, amount).then((res: { success: boolean }) => {
+      const { success } = res;
+      if (!success) {
+        message.error('Failed sent');
+      } else {
+        message.success('Successful sent');
+      }
+    });
   };
 
   return (

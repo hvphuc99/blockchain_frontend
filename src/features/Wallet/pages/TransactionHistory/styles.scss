@@ -1,14 +1,33 @@
 .history-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: auto;
+
   border: 1px solid #e7eaf3;
   border-radius: 0.5rem;
   box-shadow: 0 0.5rem 1.2rem #bdc5d133;
+  height: calc(100vh - 167px);
 
   &__title {
     padding: 10px 20px;
     border-bottom: 1px solid #e7eaf3;
   }
 
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+
+    padding: 10px 20px;
+    border-top: 1px solid #e7eaf3;
+  }
+
   &__body {
     padding: 10px 20px;
+    flex-grow: 1;
+
+    .word-break-all {
+      word-break: break-all;
+    }
   }
 }

@@ -10,7 +10,7 @@ const authApi = {
     return axiosClient.post(url, body);
   },
 
-  register: (): Promise<any> => {
+  register: (): Promise<string> => {
     const url = '/register';
 
     const body = {};

@@ -1,13 +1,21 @@
 import { AuditOutlined, CreditCardOutlined } from '@ant-design/icons';
 import { Col, Row } from 'antd';
 import Title from 'antd/lib/typography/Title';
+import walletApi from 'api/walletApi';
 import { RootState } from 'app/store';
 import 'features/Wallet/pages/Dashboard/styles.scss';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 function Dashboard(): JSX.Element {
   const { publicKey } = useSelector((state: RootState) => state.user);
+  const [balance, setBalance] = useState<number>(0);
+
+  useEffect(() => {
+    walletApi.getBalance().then((res: { balance: number }) => {
+      setBalance(res?.balance || 0);
+    });
+  }, []);
 
   return (
     <>
@@ -29,7 +37,7 @@ function Dashboard(): JSX.Element {
               <Title level={4} style={{ margin: 0 }}>
                 Balance
               </Title>
-              <span style={{ fontSize: 40 }}>0</span>
+              <span style={{ fontSize: 40 }}>{balance}</span>
             </div>
           </div>
         </Col>
