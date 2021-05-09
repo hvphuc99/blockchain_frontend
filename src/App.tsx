@@ -8,10 +8,19 @@ import Wallet from 'features/Wallet';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Switch } from 'react-router-dom';
+import socket from 'socket';
 import 'styles/common.scss';
 import Register from './features/Auth/pages/Register';
 
 function App(): JSX.Element {
+  socket.on('connect', () => {
+    console.log(`Connected with ${socket.id}`);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Disconnected');
+  });
+
   return (
     <Provider store={store}>
       <BrowserRouter>

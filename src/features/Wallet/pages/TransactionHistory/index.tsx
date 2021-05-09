@@ -1,8 +1,9 @@
 import { Button, Col, message, Row } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import walletApi from 'api/walletApi';
-import { reverse } from 'lodash';
+import { reverse, uniqBy } from 'lodash';
 import React, { useEffect, useState } from 'react';
+import socket from 'socket';
 import './styles.scss';
 
 interface ITxIn {
@@ -39,6 +40,19 @@ function TransactionHistory(): JSX.Element {
   const [blockchain, setBlockchain] = useState<IBlock[]>([]);
 
   useEffect(() => {
+    socket.on('newTransaction', (data: { newTransaction: ITransaction }) => {
+      const { newTransaction } = data;
+      setTransactions((prevTransaction: ITransaction[]) => uniqBy([newTransaction, ...prevTransaction], 'id'));
+    });
+
+    socket.on('newBlock', (data: { newBlock: IBlock }) => {
+      const { newBlock } = data;
+      setBlockchain((prevBlockchain: IBlock[]) => uniqBy([newBlock, ...prevBlockchain], 'index'));
+      setTransactions([]);
+    });
+  }, []);
+
+  useEffect(() => {
     walletApi.getTransactionPool().then((res: { transactionPool: ITransaction[] }) => {
       const { transactionPool } = res;
       setTransactions(reverse(transactionPool));
@@ -51,17 +65,13 @@ function TransactionHistory(): JSX.Element {
   }, []);
 
   const handleMine = () => {
-    if (!transactions.length) {
-      message.error('Empty transactions pool');
-      return;
-    }
     setLoading(true);
     walletApi.mine().then((res: { newBlock: IBlock }) => {
       const { newBlock } = res;
       if (!newBlock) {
         message.error('Failed mine');
       } else {
-        setBlockchain((prevBlockChain) => [newBlock, ...prevBlockChain]);
+        setBlockchain((prevBlockChain) => uniqBy([newBlock, ...prevBlockChain], 'index'));
         message.success('Successful mined');
       }
       setTransactions([]);
