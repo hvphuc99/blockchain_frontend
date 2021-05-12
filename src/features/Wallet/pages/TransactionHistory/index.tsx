@@ -12,7 +12,7 @@ interface ITxIn {
   signature: string;
 }
 
-interface ITxOut {
+export interface ITxOut {
   address: string;
   amount: number;
 }
@@ -47,8 +47,14 @@ function TransactionHistory(): JSX.Element {
 
     socket.on('newBlock', (data: { newBlock: IBlock }) => {
       const { newBlock } = data;
-      setBlockchain((prevBlockchain: IBlock[]) => uniqBy([newBlock, ...prevBlockchain], 'index'));
-      setTransactions([]);
+      const myBlockchain = reverse(JSON.parse(localStorage.getItem('blockchain') || ''));
+      walletApi.validateBlock(newBlock, myBlockchain).then((res: { isValid: boolean }) => {
+        const { isValid } = res;
+        if (isValid) {
+          setBlockchain((prevBlockchain: IBlock[]) => uniqBy([newBlock, ...prevBlockchain], 'index'));
+          setTransactions([]);
+        }
+      });
     });
   }, []);
 
@@ -63,6 +69,10 @@ function TransactionHistory(): JSX.Element {
       setBlockchain(reverse(blockchain));
     });
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('blockchain', JSON.stringify(blockchain));
+  }, [blockchain]);
 
   const handleMine = () => {
     setLoading(true);
@@ -114,7 +124,7 @@ function TransactionHistory(): JSX.Element {
                 <Row key={transaction?.id}>
                   <Col span={1}>{transactions.length - index}</Col>
                   <Col span={11} style={{ paddingRight: 5 }}>
-                    <span className="word-break-all">{transaction?.id || ''}</span>
+                    <span className="word-break-all">{`ID: ${transaction?.id || ''}`}</span>
                   </Col>
                   <Col span={12}>
                     <div className="word-break-all">{`To: ${transaction?.txOuts[0].address}`}</div>

@@ -31,6 +31,20 @@ const walletApi = {
 
     return axiosClient.get(url);
   },
+  validateBlock: (block: IBlock, blockchain: IBlock[]): Promise<{ isValid: boolean }> => {
+    const url = '/validateBlock';
+    const body = {
+      block,
+      blockchain,
+    };
+
+    return axiosClient.post(url, body);
+  },
+  getMyTransaction: (): Promise<{ transactions: ITransaction[] }> => {
+    const url = '/getMyTransaction';
+
+    return axiosClient.get(url);
+  },
 };
 
 export default walletApi;

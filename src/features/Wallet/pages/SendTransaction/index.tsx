@@ -10,6 +10,8 @@ interface ISendTransactionForm {
 }
 
 function SendTransaction(): JSX.Element {
+  const [form] = Form.useForm();
+
   const handleSubmit = (values: ISendTransactionForm) => {
     const { address, amount } = values;
     walletApi.sendTransaction(address, amount).then((res: { success: boolean }) => {
@@ -17,13 +19,14 @@ function SendTransaction(): JSX.Element {
       if (!success) {
         message.error('Failed sent');
       } else {
+        form.resetFields();
         message.success('Successful sent');
       }
     });
   };
 
   return (
-    <Form onFinish={handleSubmit}>
+    <Form onFinish={handleSubmit} form={form}>
       <Title level={2}>Send Transaction</Title>
       <Form.Item name="address" label="Address" rules={[{ required: true, message: 'Please input address!' }]}>
         <Input />
