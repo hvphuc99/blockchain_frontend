@@ -17,7 +17,7 @@ function SendTransaction(): JSX.Element {
     walletApi.sendTransaction(address, amount).then((res: { success: boolean }) => {
       const { success } = res;
       if (!success) {
-        message.error('Failed sent');
+        message.error('Not enough money to send');
       } else {
         form.resetFields();
         message.success('Successful sent');
