@@ -1,12 +1,14 @@
 import { Button, Col, message, Row } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import walletApi from 'api/walletApi';
+import ModalBlockDetail from 'features/Wallet/components/ModalBlockDetail';
+import ModalTransactionDetail from 'features/Wallet/components/ModalTransactionDetail';
 import { reverse, uniqBy } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import socket from 'socket';
 import './styles.scss';
 
-interface ITxIn {
+export interface ITxIn {
   txOutId: string;
   txOutIndex: number;
   signature: string;
@@ -38,6 +40,10 @@ function TransactionHistory(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
   const [blockchain, setBlockchain] = useState<IBlock[]>([]);
+  const [visibleModalTransaction, setVisibleModalTransaction] = useState<boolean>(false);
+  const [transactionDetail, setTransactionDetail] = useState<ITransaction>();
+  const [visibleModalBlock, setVisibleModalBlock] = useState<boolean>(false);
+  const [blockDetail, setBlockDetail] = useState<IBlock>();
 
   useEffect(() => {
     socket.on('newTransaction', (data: { newTransaction: ITransaction }) => {
@@ -89,6 +95,20 @@ function TransactionHistory(): JSX.Element {
     });
   };
 
+  const toggleModalTransaction = () => setVisibleModalTransaction(!visibleModalTransaction);
+
+  const handleClickTransaction = (transaction: ITransaction) => {
+    setTransactionDetail(transaction);
+    toggleModalTransaction();
+  };
+
+  const toggleModalBlock = () => setVisibleModalBlock(!visibleModalBlock);
+
+  const handleClickBlock = (blockDetail: IBlock) => {
+    setBlockDetail(blockDetail);
+    toggleModalBlock();
+  };
+
   return (
     <>
       <Title level={2}>Transaction History</Title>
@@ -104,8 +124,11 @@ function TransactionHistory(): JSX.Element {
               {blockchain?.map((block: IBlock) => (
                 <Row key={block?.index}>
                   <Col span={1}>{block?.index + 1}</Col>
-                  <Col span={23}>
+                  <Col span={22}>
                     <div className="word-break-all">{`Miner: ${block?.miner || 'Admin'}`}</div>
+                  </Col>
+                  <Col span={1}>
+                    <a onClick={() => handleClickBlock(block)}>Detail</a>
                   </Col>
                 </Row>
               ))}
@@ -124,7 +147,9 @@ function TransactionHistory(): JSX.Element {
                 <Row key={transaction?.id}>
                   <Col span={1}>{transactions.length - index}</Col>
                   <Col span={11} style={{ paddingRight: 5 }}>
-                    <span className="word-break-all">{`ID: ${transaction?.id || ''}`}</span>
+                    <a className="word-break-all" onClick={() => handleClickTransaction(transaction)}>{`ID: ${
+                      transaction?.id || ''
+                    }`}</a>
                   </Col>
                   <Col span={12}>
                     <div className="word-break-all">{`To: ${transaction?.txOuts[0].address}`}</div>
@@ -141,6 +166,12 @@ function TransactionHistory(): JSX.Element {
           </div>
         </Col>
       </Row>
+      <ModalTransactionDetail
+        visible={visibleModalTransaction}
+        toggle={toggleModalTransaction}
+        data={transactionDetail}
+      />
+      <ModalBlockDetail visible={visibleModalBlock} toggle={toggleModalBlock} data={blockDetail} />
     </>
   );
 }

@@ -7,11 +7,14 @@ import 'features/Wallet/pages/Dashboard/styles.scss';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ITransaction, ITxOut } from 'features/Wallet/pages/TransactionHistory';
+import ModalTransactionDetail from 'features/Wallet/components/ModalTransactionDetail';
 
 function Dashboard(): JSX.Element {
   const { publicKey } = useSelector((state: RootState) => state.user);
   const [balance, setBalance] = useState<number>(0);
   const [myTransactions, setMyTransactions] = useState<ITransaction[]>([]);
+  const [visibleModalTransaction, setVisibleModalTransaction] = useState<boolean>(false);
+  const [transactionDetail, setTransactionDetail] = useState<ITransaction>();
 
   useEffect(() => {
     walletApi.getBalance().then((res: { balance: number }) => {
@@ -23,10 +26,19 @@ function Dashboard(): JSX.Element {
     });
   }, []);
 
+  const toggleModalTransaction = () => setVisibleModalTransaction(!visibleModalTransaction);
+
+  const handleClickTransaction = (transaction: ITransaction) => {
+    setTransactionDetail(transaction);
+    toggleModalTransaction();
+  };
+
   const columns = [
     {
       title: 'ID',
       dataIndex: 'id',
+      // eslint-disable-next-line react/display-name
+      render: (value: string, record: ITransaction) => <a onClick={() => handleClickTransaction(record)}>{value}</a>,
     },
     {
       title: 'To',
@@ -39,7 +51,13 @@ function Dashboard(): JSX.Element {
       dataIndex: 'txOuts',
       // eslint-disable-next-line react/display-name
       render: (value: ITxOut[]) => <span>{value[0].amount}</span>,
-      width: 150,
+      width: 100,
+    },
+    {
+      title: '',
+      // eslint-disable-next-line react/display-name
+      render: (record: ITransaction) => <a onClick={() => handleClickTransaction(record)}>Detail</a>,
+      width: 100,
     },
   ];
 
@@ -72,6 +90,11 @@ function Dashboard(): JSX.Element {
         My transactions
       </Title>
       <Table className="mt-2" rowKey="id" columns={columns} dataSource={myTransactions} scroll={{ x: 500, y: 400 }} />
+      <ModalTransactionDetail
+        visible={visibleModalTransaction}
+        toggle={toggleModalTransaction}
+        data={transactionDetail}
+      />
     </>
   );
 }
